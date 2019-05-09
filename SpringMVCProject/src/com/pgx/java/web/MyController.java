@@ -5,14 +5,18 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+
 
 @Controller
 public class MyController {
@@ -53,10 +57,27 @@ public class MyController {
 		return "StartPage";
 	}
 	
-	@RequestMapping("/ajaxcall")
+	@RequestMapping("/GameEnds")
 	@ResponseBody
 	public String ajaxcall() {
 		Gson gson = new Gson();
-		return gson.toJson("okokookokkoko");
+	    Map<String, String> stateMap = new HashMap<>();
+	    stateMap.put("dialogState", "Timer stops");
+		return gson.toJson(stateMap);
+	}
+	
+	@RequestMapping("/loginVerification")
+	@ResponseBody
+	public String loginVerification(@RequestBody String jsonData) {
+		Gson gson = new Gson();
+		Map<String, String> jMap = gson.fromJson(jsonData, Map.class);
+	    Map<String, String> stateMap = new HashMap<>();
+	    stateMap.put("dialogState", "Timer stops");
+		return gson.toJson(stateMap);
+	}
+	
+	@RequestMapping("/EndPage")
+	public String EndPage(Model model) {
+		return "EndPage";
 	}
 }

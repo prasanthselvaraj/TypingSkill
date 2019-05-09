@@ -3,17 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-  function loadLogin(){
-	 var host = window.location.hostname;
-	  var path = window.location.pathname;
-	  var pathArr = path.split("/");
-	  var protocol = window.location.protocol;
-	  var port = window.location.port;
-	  var urlForm = protocol.concat("//",host,":",port,"/",pathArr[1],"/StartPage");
-	  window.location.href = urlForm;
-  }
-</script>
 <style>
 #buttonloginId {
 	left: 3em;
@@ -92,8 +81,41 @@
 			<input id="passInput" placeholder="Password"></input>
 		</div>
 		<div id="buttonloginId">
-		  <button class="button" onClick="loadLogin()">Start</button>
+			<button class="button" onClick="loadLogin()">Start</button>
 		</div>
 	</div>
 </body>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> 
+<script>
+	function loadLogin() {
+		var userNameId = document.getElementById('userInput');
+		var passWordId = document.getElementById('passInput');
+		var loginParams = {
+			userName : userNameId.value,
+			passWordId : passWordId.value
+		};
+		var jsonData = JSON.stringify(loginParams);
+		$.ajax({
+			cache : false,
+			type : "POST",
+			async : false,
+			url : "http://localhost:8080/SpringMVCProject/loginVerification",
+			data : jsonData,
+			contentType : "application/json",
+			dataType : "json",
+			processData : true,
+			success : function(result) {
+				alert('success');
+				 var host = window.location.hostname;
+				  var path = window.location.pathname;
+				  var pathArr = path.split("/");
+				  var protocol = window.location.protocol;
+				  var port = window.location.port;
+				  var urlForm = protocol.concat("//",host,":",port,"/",pathArr[1],"/StartPage");
+				  window.location.href = urlForm;
+			}
+		}); 
+	}
+</script>
 </html>

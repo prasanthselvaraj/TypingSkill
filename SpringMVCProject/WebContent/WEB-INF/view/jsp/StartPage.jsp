@@ -111,7 +111,8 @@
 
 #minAea {
 	left: 5em;
-	position: absolute; height : 52px;
+	position: absolute;
+	height: 52px;
 	width: 56px;
 	height: 52px;
 }
@@ -182,18 +183,20 @@
 		</div>
 	</div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script>
 	var mainDisplay = document.getElementById('mainArea');
 	var diaDisplay = document.getElementById('dialogArea');
 	var okButtonClick = document.getElementById('okButtonId');
-	okButtonClick.addEventListener("click", gameStarts);
+	var messageBox = document.getElementById('alertMessageId');
 	var minvar = document.getElementById('minLabelId');
 	var secvar = document.getElementById('secLabelId');
 	var minutes = minvar.innerHTML;
 	var seconds = secvar.innerHTML;
 	var timer = null;
-	function gameStarts(event) {
+	okButtonClick.addEventListener("click", gameStarts);
+	function gameStarts() {
 		diaDisplay.style.display = "none";
 		mainDisplay.setAttribute("style", "-webkit-filter: blur(0px)");
 		timer = setInterval(function() {
@@ -206,31 +209,43 @@
 				if (minutes === 0) {
 					seconds = '00';
 					minutes = '00';
-					timeEnds(event);
+					timeEnds();
 				}
 			}
 			minvar.innerText = minutes;
 			secvar.innerText = seconds;
 		}, 1000);
 	}
-	function timeEnds(event) {
+	function timeEnds() {
 		minutes.innerText = minutes;
 		seconds.innerText = seconds;
 		clearInterval(timer);
-		<!-- event.preventDefault(); -->
 		$.ajax({
 			cache : false,
 			type : "GET",
 			async : false,
-			url : "http://localhost:8080/SpringMVCProject/ajaxcall",
+			url : "http://localhost:8080/SpringMVCProject/GameEnds",
 			data : "",
 			contentType : "application/json",
 			dataType : "json",
 			processData : true,
 			success : function(result) {
-				alert("data");
+				messageBox.innerText = result.dialogState;
+				diaDisplay.style.display = "block";
+				mainDisplay.setAttribute("style", "-webkit-filter: blur(5px)");
+				okButtonClick.addEventListener("click", gameEnds);
 			}
 		});
+	}
+	function gameEnds(event) {
+		var host = window.location.hostname;
+		var path = window.location.pathname;
+		var pathArr = path.split("/");
+		var protocol = window.location.protocol;
+		var port = window.location.port;
+		var urlForm = protocol.concat("//", host, ":", port, "/", pathArr[1],
+				"/EndPage");
+		window.location.href = urlForm;
 	}
 </script>
 </html>

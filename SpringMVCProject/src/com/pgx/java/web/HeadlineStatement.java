@@ -7,6 +7,8 @@ public class HeadlineStatement {
 	
 	private String dialogSentence;
 	
+	
+	
 	public String getTitle() {
 		return title;
 	}
